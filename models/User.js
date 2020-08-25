@@ -26,6 +26,8 @@ const User = sequelize.define('User', {
   address: {
     type: Sequelize.STRING(255)
   }
+}, { 
+  tableName: 'users'
 })
 
 function validateUser(req, res, next) {
@@ -33,7 +35,7 @@ function validateUser(req, res, next) {
     name: Joi.string().max(255),
     phone: Joi.string().max(11),
     email: Joi.string().email().max(255),
-    email: Joi.string().max(255).optional()
+    address: Joi.string().max(255).optional()
   })
   // seek for error
   const { error } = schema.validate(req.body, {
