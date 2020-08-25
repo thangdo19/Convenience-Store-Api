@@ -1,0 +1,5 @@
+const express = require('express')
+const app = express()
+require('./startup/config')()
+require('./startup/error')()
+app.listen(port = (process.env.PORT || 3000), () => console.log(`Listening on port ${port}...`))
