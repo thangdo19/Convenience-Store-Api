@@ -9,6 +9,9 @@ const Product = sequelize.define('Product', {
     primaryKey: true,
     autoIncrement: true
   },
+  categoryId: {
+    type: Sequelize.INTEGER(11)
+  },
   name: {
     type: Sequelize.STRING(255),
     allowNull: false,
@@ -20,7 +23,8 @@ const Product = sequelize.define('Product', {
 
 function validateProduct(req, res, next) {
   const schema = Joi.object({
-    name: Joi.string().max(255)
+    name: Joi.string().max(255),
+    categoryId: Joi.number()
   })
   // seek for error
   const { error } = schema.validate(req.body, {
@@ -32,7 +36,4 @@ function validateProduct(req, res, next) {
   next()
 }
 
-module.exports = {
-  Product,
-  validateProduct
-}
+module.exports = { Product, validateProduct }

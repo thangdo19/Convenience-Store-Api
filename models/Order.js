@@ -9,6 +9,9 @@ const Order = sequelize.define('Order', {
     primaryKey: true,
     autoIncrement: true
   },
+  userId: {
+    type: Sequelize.INTEGER(11)
+  },
   note: {
     type: Sequelize.STRING(255)
   }
