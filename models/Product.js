@@ -16,6 +16,12 @@ const Product = sequelize.define('Product', {
     type: Sequelize.STRING(255),
     allowNull: false,
     unique: true
+  },
+  numberInStock: {
+    type: Sequelize.INTEGER(11),
+    defaultValue: 0,
+    allowNull: false,
+    validate: { min: 0 }
   }
 }, { 
   tableName: 'products'
@@ -24,7 +30,8 @@ const Product = sequelize.define('Product', {
 function validateProduct(req, res, next) {
   const schema = Joi.object({
     name: Joi.string().max(255),
-    categoryId: Joi.number()
+    categoryId: Joi.number(),
+    numberInStock: Joi.number().min(0)
   })
   // seek for error
   const { error } = schema.validate(req.body, {
