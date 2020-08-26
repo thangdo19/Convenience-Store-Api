@@ -9,7 +9,9 @@ router.get('/', async (req, res) => {
     attributes: {
       exclude: ['createdAt', 'updatedAt']
     }, 
-    order: ['id']
+    order: [
+      ['id']
+    ]
   })
   return res.json({ status: 200, data: categories })
 })  

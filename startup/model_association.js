@@ -21,7 +21,7 @@ module.exports = function() {
   User.hasMany(Order, {
     as: 'orders',
     foreignKey: 'userId',
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   Order.belongsTo(User, {

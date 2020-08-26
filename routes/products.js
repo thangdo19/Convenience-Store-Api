@@ -1,21 +1,23 @@
 const { Product, validateProduct } = require('../models/Product')
 const { Category } = require('../models/Category')
-const { Op } = require('sequelize')
-const _ = require('lodash')
 const express = require('express')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
+  // sort by a property, direction can be set to DESC to sort in descending order
+  const orderBy = req.query.orderBy
+  const direction = req.query.direction
+
   const products = await Product.findAll({ 
-    attributes: {
-      exclude: ['createdAt', 'updatedAt', 'categoryId']
-    }, 
+    attributes: { exclude: ['createdAt', 'updatedAt', 'categoryId'] },
     include: {
       model: Category,
       as: 'category',
       attributes: { exclude: ['createdAt', 'updatedAt'] }
     },
-    order: ['id']
+    order: [
+      (orderBy) ? ((direction) ? [orderBy, direction] : [orderBy]) : ['id']
+    ]
   })
   return res.json({ status: 200, data: products })
 })  

@@ -13,6 +13,9 @@ const OrderProduct = sequelize.define('OrderProduct', {
   },
   productId: { 
     type: Sequelize.INTEGER(11) 
+  },
+  orderAmount: {
+    type: Sequelize.INTEGER(11)
   }
 }, { 
   tableName: 'order_products'
