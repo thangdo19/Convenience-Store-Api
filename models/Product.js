@@ -3,44 +3,35 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../db/connection')
 
-const User = sequelize.define('User', {
+const Product = sequelize.define('Product', {
   id: {
     type: Sequelize.INTEGER(11),
     primaryKey: true,
     autoIncrement: true
   },
+  categoryId: {
+    type: Sequelize.INTEGER(11)
+  },
   name: {
     type: Sequelize.STRING(255),
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
-  phone: {
-    type: Sequelize.STRING(11),
-    unique: true,
-    allowNull: false
-  },
-  email: {
-    type: Sequelize.STRING(255),
-    unique: true,
-    allowNull: false
-  },
-  password: {
-    type: Sequelize.STRING(1024),
-    allowNull: false
-  },
-  address: {
-    type: Sequelize.STRING(255)
+  numberInStock: {
+    type: Sequelize.INTEGER(11),
+    defaultValue: 0,
+    allowNull: false,
+    validate: { min: 0 }
   }
 }, { 
-  tableName: 'users'
+  tableName: 'products'
 })
 
-function validateUser(req, res, next) {
+function validateProduct(req, res, next) {
   const schema = Joi.object({
     name: Joi.string().max(255),
-    phone: Joi.string().max(11),
-    email: Joi.string().email().max(255),
-    password: Joi.string().max(1024),
-    address: Joi.string().max(255).optional()
+    categoryId: Joi.number(),
+    numberInStock: Joi.number().min(0)
   })
   // seek for error
   const { error } = schema.validate(req.body, {
@@ -52,7 +43,4 @@ function validateUser(req, res, next) {
   next()
 }
 
-module.exports = {
-  User,
-  validateUser
-}
+module.exports = { Product, validateProduct }
