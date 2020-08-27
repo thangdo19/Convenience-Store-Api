@@ -44,7 +44,7 @@ router.post('/newProduct', [validateOrderProductAddition], async (req, res) => {
 
   // check for stocks
   const product = await Product.findOne({ where: { id: req.body.productId }})
-  if (product.numberInStock <= req.body.productAmount) return res.json({
+  if (product.numberInStock < req.body.productAmount) return res.json({
     status: 400,
     message: `Product ${product.name} is currently not having enough stock`
   })
@@ -54,10 +54,13 @@ router.post('/newProduct', [validateOrderProductAddition], async (req, res) => {
     // add to order
     await order.addProduct(req.body.productId, { 
       transaction: transaction,
-      through: { orderAmount: req.body.productAmount }
+      through: { productAmount: req.body.productAmount }
     })
     // reduce stock
-    await product.update({ numberInStock: (product.numberInStock - req.body.productAmount) }, { transaction: transaction })
+    await Product.update({ numberInStock: (product.numberInStock - req.body.productAmount) }, {
+      transaction: transaction,
+      where: { id: product.id }
+    })
     await transaction.commit()
     return res.json({ status: 200 })
   }

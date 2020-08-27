@@ -14,7 +14,7 @@ const OrderProduct = sequelize.define('OrderProduct', {
   productId: { 
     type: Sequelize.INTEGER(11) 
   },
-  orderAmount: {
+  productAmount: {
     type: Sequelize.INTEGER(11)
   }
 }, { 

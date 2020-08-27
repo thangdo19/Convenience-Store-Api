@@ -23,6 +23,10 @@ const User = sequelize.define('User', {
     unique: true,
     allowNull: false
   },
+  password: {
+    type: Sequelize.STRING(1024),
+    allowNull: false
+  },
   address: {
     type: Sequelize.STRING(255)
   }
@@ -35,6 +39,7 @@ function validateUser(req, res, next) {
     name: Joi.string().max(255),
     phone: Joi.string().max(11),
     email: Joi.string().email().max(255),
+    password: Joi.string().max(1024),
     address: Joi.string().max(255).optional()
   })
   // seek for error
