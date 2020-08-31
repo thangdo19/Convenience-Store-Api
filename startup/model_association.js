@@ -3,6 +3,9 @@ const { OrderProduct } = require('../models/OrderProduct')
 const { Order } = require('../models/Order')
 const { Product } = require('../models/Product')
 const { Category } = require('../models/Category')
+const { Permission } = require('../models/Permission')
+const { PermissionDetail } = require('../models/PermissionDetail')
+const { UserPermission } = require('../models/UserPermission')
 
 module.exports = function() {
   // create relationship
@@ -44,5 +47,33 @@ module.exports = function() {
     otherKey: "orderId",
     onUpdate: "CASCADE",
     onDelete: "SET NULL" 
+  })
+  // Permission - PermissionDetail (1:1)
+  Permission.hasOne(PermissionDetail, {
+    as: 'permissionDetail',
+    foreignKey: 'permissionId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  PermissionDetail.belongsTo(Permission, {
+    as: 'permission',
+    foreignKey: 'permissionId'
+  }),
+  // User - Permission (M:N)
+  User.belongsToMany(Permission, {
+    through: UserPermission,
+    as: 'permissions',
+    foreignKey: 'userId',
+    otherKey: 'permissionId',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  }),
+  Permission.belongsToMany(User, {
+    through: UserPermission,
+    as: 'users',
+    foreignKey: 'permissionId',
+    otherKey: 'userId',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
   })
 }
