@@ -6,6 +6,8 @@ const { Category } = require('../models/Category')
 const { Permission } = require('../models/Permission')
 const { PermissionDetail } = require('../models/PermissionDetail')
 const { UserPermission } = require('../models/UserPermission')
+const { Store } = require('../models/Store')
+const { StoreProduct } = require('../models/StoreProduct')
 
 module.exports = function() {
   // create relationship
@@ -73,6 +75,23 @@ module.exports = function() {
     as: 'users',
     foreignKey: 'permissionId',
     otherKey: 'userId',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  })
+  // Store - Product (M:N)
+  Store.belongsToMany(Product, {
+    through: StoreProduct,
+    as: 'products',
+    foreignKey: 'productId',
+    otherKey: 'storeId',
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+  }),
+  Product.belongsToMany(Store, {
+    through: StoreProduct,
+    as: 'stores',
+    foreignKey: 'storeId',
+    otherKey: 'productId',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
