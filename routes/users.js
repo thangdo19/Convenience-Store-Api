@@ -1,7 +1,9 @@
-const { User, validateUser } = require('../models/User')
+const { User, validateUser, validateUserPermissions } = require('../models/User')
+const { Permission, validatePermission } = require('../models/Permission')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 const bcrypt = require('bcrypt')
+const sequelize = require('../db/connection')
 const express = require('express')
 const router = express.Router()
 
@@ -10,6 +12,18 @@ router.get('/', async (req, res) => {
     exclude: ['createdAt', 'updatedAt', 'password']
   }})
   return res.json({ status: 200, data: users })
+})
+
+router.get('/:id', async (req, res) => {
+  const user = await User.findOne({ 
+    where: { id: req.params.id },
+    attributes: { exclude: ['createdAt', 'updatedAt', 'password'] },
+    include: {
+      model: Permission,
+      as: 'permissions'
+    }
+  })
+  return res.json({ status: 200, data: user })
 })
 
 router.post('/', [validateUser], async (req, res) => {
@@ -23,6 +37,26 @@ router.post('/', [validateUser], async (req, res) => {
   const user = await User.create(req.body)
   const userInShort = _.omit(user.get({ plain: true }), ['createdAt', 'updatedAt', 'password'])
   return res.json({ status: 201, data: userInShort })
+})
+
+router.post('/permissions', [validateUserPermissions], async (req, res) => {
+  const user = await User.findOne({ where: { id: req.body.userId }})
+  
+  const transaction = await sequelize.transaction()
+  try {
+    for (const perId of req.body.permissionIds) {
+      const userPermission = await user.addPermission(perId, { transaction: transaction })
+      console.log(userPermission)
+    }
+  }
+  catch(err) {
+    console.log(err)
+    await transaction.rollback()
+    return res.json({ status: 400, message: err.message })
+  }
+
+  await transaction.commit()
+  return res.json({ status: 200 })
 })
 
 router.patch('/:id', [validateUser], async (req, res) => {

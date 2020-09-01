@@ -17,8 +17,7 @@ const Permission = sequelize.define('Permission', {
 
 function validatePermission(req, res, next) {
   const schema = Joi.object({
-    id: Joi.number(),
-    perName: Joi.string().max(255)
+    permissionName: Joi.string().max(255)
   })
   const { error } = schema.validate(req.body, {
     presence: (req.method) ? 'required' : 'optional',

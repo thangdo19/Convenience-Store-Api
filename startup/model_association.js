@@ -48,8 +48,8 @@ module.exports = function() {
     onUpdate: "CASCADE",
     onDelete: "SET NULL" 
   })
-  // Permission - PermissionDetail (1:1)
-  Permission.hasOne(PermissionDetail, {
+  // Permission - PermissionDetail (1:N)
+  Permission.hasMany(PermissionDetail, {
     as: 'permissionDetail',
     foreignKey: 'permissionId',
     onDelete: 'CASCADE',
