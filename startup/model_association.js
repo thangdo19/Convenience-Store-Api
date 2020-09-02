@@ -52,7 +52,7 @@ module.exports = function() {
   })
   // Permission - PermissionDetail (1:N)
   Permission.hasMany(PermissionDetail, {
-    as: 'permissionDetail',
+    as: 'permissionDetails',
     foreignKey: 'permissionId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

@@ -26,8 +26,8 @@ router.post('/', [validatePermission], async (req, res) => {
 
 router.post('/details', [validatePermissionDetail], async (req, res) => {
   try {
-    const permissionDetail = await PermissionDetail.create(req.body)
-    return res.json({ status: 201, data: permissionDetail })
+    const permissionDetails = await PermissionDetail.create(req.body)
+    return res.json({ status: 201, data: permissionDetails })
   }
   catch(err) {
     console.log(err)
