@@ -82,16 +82,16 @@ module.exports = function() {
   Store.belongsToMany(Product, {
     through: StoreProduct,
     as: 'products',
-    foreignKey: 'productId',
-    otherKey: 'storeId',
+    foreignKey: 'storeId',
+    otherKey: 'productId',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   }),
   Product.belongsToMany(Store, {
     through: StoreProduct,
     as: 'stores',
-    foreignKey: 'storeId',
-    otherKey: 'productId',
+    foreignKey: 'productId',
+    otherKey: 'storeId',
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE'
   })
