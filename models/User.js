@@ -14,14 +14,14 @@ const User = sequelize.define('User', {
     allowNull: false
   },
   phone: {
-    type: Sequelize.STRING(11),
-    unique: true,
+    type: Sequelize.STRING(255),
+    //unique: true,
     allowNull: false
   },
   email: {
     type: Sequelize.STRING(255),
-    unique: true,
-    allowNull: false
+    //unique: true,
+    allowNull: true
   },
   password: {
     type: Sequelize.STRING(1024),
