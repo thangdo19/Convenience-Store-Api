@@ -2,6 +2,7 @@ const { User, validateUser, validateUserPermissions } = require('../models/User'
 const { Permission, validatePermission } = require('../models/Permission')
 const { PermissionDetail } = require('../models/PermissionDetail')
 const { Op } = require('sequelize')
+const auth = require('../middleware/auth')
 const checkAction = require('../middleware/check_action')
 const _ = require('lodash')
 const bcrypt = require('bcrypt')
@@ -46,8 +47,8 @@ router.get('/:id', async (req, res) => {
   return res.json({ status: 200, data: user })
 })
 
-router.get('/test/:id', [checkAction('EDIT_USER')], async (req, res) => {
-  return res.json({ status: 200, shit: 'shit' })
+router.get('/test/:id', [auth, checkAction('EDIT_USER')], async (req, res) => {
+  return res.json({ status: 200 })
 })
 
 router.post('/', [validateUser], async (req, res) => {

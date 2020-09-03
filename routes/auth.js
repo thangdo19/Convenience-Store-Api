@@ -1,4 +1,5 @@
 const { User } = require('../models/User')
+const { Permission, validatePermission } = require('../models/Permission')
 const Joi = require('joi')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -11,6 +12,12 @@ router.post('/', [validate], async (req, res) => {
 
   const isValidPassword = await bcrypt.compare(req.body.password, user.password)
   if (!isValidPassword) return res.json({ status: 400, message: 'Invalid email or password' })
+
+  // const entities = await user.getPermissions()
+  // const permissions = []
+  // for (const permission of entities) {
+  //   permissions.push(permission.permissionName)
+  // }
 
   const token = jwt.sign({ id: user.id }, process.env.JWT_KEY)
   return res.json({ status: 200, token })

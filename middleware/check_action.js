@@ -5,7 +5,7 @@ const { PermissionDetail } = require('../models/PermissionDetail')
 module.exports = function checkAction(actionName) {
   return async (req, res, next) => {
     const user = await User.findOne({ 
-      where: { id: req.params.id },
+      where: { id: req.user.id },
       include: {
         model: Permission,
         as: 'permissions',
