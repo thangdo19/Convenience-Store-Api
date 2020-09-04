@@ -15,13 +15,13 @@ const Product = sequelize.define('Product', {
   name: {
     type: Sequelize.STRING(255),
     allowNull: false,
-    unique: true
+    //unique: true
   },
   numberInStock: {
     type: Sequelize.INTEGER(11),
     defaultValue: 0,
     allowNull: false,
-    validate: { min: 0 }
+    //validate: { min: 0 }
   }
 }, { 
   tableName: 'products'

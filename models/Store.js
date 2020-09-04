@@ -8,6 +8,10 @@ const Store = sequelize.define('Store', {
     primaryKey: true,
     autoIncrement: true
   },
+  name: {
+    type: Sequelize.STRING(255),
+    allowNull: false
+  },
   address: {
     type: Sequelize.STRING(255),
     allowNull: false

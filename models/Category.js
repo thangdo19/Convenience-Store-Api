@@ -12,7 +12,7 @@ const Category = sequelize.define('Category', {
   name: {
     type: Sequelize.STRING(255),
     allowNull: true,
-    unique: true
+    //unique: true
   }
 }, { 
   tableName: 'categories'

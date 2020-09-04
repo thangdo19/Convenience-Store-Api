@@ -12,8 +12,7 @@ const users = [...Array(100)].map((user)=>({
 module.exports = {
   up: (queryInterface, Sequelize) => {
     
-    return queryInterface.bulkInsert("users",users
-      )
+    return queryInterface.bulkInsert("users",users)
   },
 
   down: (queryInterface, Sequelize) => {
