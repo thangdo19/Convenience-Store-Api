@@ -43,7 +43,22 @@ function validatePermissionDetail(req, res, next) {
   next()
 }
 
+function validateActions(req, res, next) {
+  const schema = Joi.object({
+    permissionId: Joi.number(),
+    actionNames: Joi.array().items(Joi.string().max(255)),
+    havePermission: Joi.boolean()
+  })
+  const { error } = schema.validate(req.body, {
+    presence: 'required',
+    abortEarly: false
+  })
+  if (error) return res.json({ status: 400, message: error.message });
+  next()
+}
+
 module.exports = {
   PermissionDetail,
-  validatePermissionDetail
+  validatePermissionDetail,
+  validateActions
 }

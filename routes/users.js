@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: {
         model: PermissionDetail,
-        as: 'permissionDetail',
+        as: 'permissionDetails',
         attributes: { exclude: ['createdAt', 'updatedAt', 'permissionId'] }
       },
       through: { attributes: [] }
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: {
         model: PermissionDetail,
-        as: 'permissionDetail',
+        as: 'permissionDetails',
         attributes: { exclude: ['createdAt', 'updatedAt', 'permissionId'] }
       },
       through: { attributes: [] }
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res) => {
   return res.json({ status: 200, data: user })
 })
 
-router.get('/test/:id', [auth, checkAction('EDIT_USER')], async (req, res) => {
+router.get('/test/:id', [auth, checkAction('EDIT_ORDER')], async (req, res) => {
   return res.json({ status: 200 })
 })
 
@@ -66,6 +66,7 @@ router.post('/', [validateUser], async (req, res) => {
 
 router.post('/permissions', [validateUserPermissions], async (req, res) => {
   const user = await User.findOne({ where: { id: req.body.userId }})
+  if (!user) return res.json({ status: 404, message: 'User not found' })
   
   const transaction = await sequelize.transaction()
   try {

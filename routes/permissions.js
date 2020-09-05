@@ -1,5 +1,5 @@
 const { Permission, validatePermission } = require('../models/Permission')
-const { PermissionDetail, validatePermissionDetail } = require('../models/PermissionDetail')
+const { PermissionDetail, validateActions } = require('../models/PermissionDetail')
 const sequelize = require('../db/connection')
 const express = require('express')
 const router = express.Router()
@@ -9,6 +9,13 @@ router.get('/', async (req, res) => {
     attributes: { exclude: ['createdAt', 'updatedAt'] }
   })
   return res.json({ status: 200, data: permissions })
+})
+
+router.get('/details', async (req, res) => {
+  const details = await PermissionDetail.findAll({
+    attributes: { exclude: ['createdAt', 'updatedAt'] }
+  })
+  return res.json({ status: 200, data: details })
 })
 
 router.post('/', [validatePermission], async (req, res) => {
@@ -31,29 +38,38 @@ router.post('/', [validatePermission], async (req, res) => {
   }
 })
 
-router.post('/details', [validatePermissionDetail], async (req, res) => {
+router.patch('/details', [validateActions], async (req, res) => {
+  const transaction = await sequelize.transaction()
   try {
-    const permissionDetails = await PermissionDetail.create(req.body)
-    return res.json({ status: 201, data: permissionDetails })
+    // loop for every actionName then update it
+    for (const name of req.body.actionNames) {
+      await PermissionDetail.update({ checkAction: (req.body.havePermission) ? true : false }, {
+        transaction: transaction,
+        where: { 
+          permissionId: req.body.permissionId,
+          actionName: name
+        }
+      })
+    }
+    // no error occurs, commit transaction & response
+    await transaction.commit()
+    return res.json({ status: 200 })
   }
   catch(err) {
     console.log(err)
-    return res.json({ 
-      status: 400, 
-      message: (err.parent) ? err.parent.sqlMessage : err.message 
-    })
+    await transaction.rollback()
+    return res.json({ status: 400, message: err.message })
   }
 })
 
 async function addDetails(perId, transaction) {
   const actionNames = [
-    'CREATE_ORDER',
-    'CREATE_USER',
-    'VIEW_ORDER',
-    'VIEW_USER',
-    'EDIT_ORDER',
-    'DELETE_ORDER',
-    'DELETE_USER'
+    'CREATE_ORDER', 'VIEW_ORDER', 'EDIT_ORDER', 'DELETE_ORDER',
+    'CREATE_USER', 'VIEW_USER', 'EDIT_USER', 'DELETE_USER',
+    'CREATE_PRODUCT', 'VIEW_PRODUCT', 'EDIT_PRODUCT', 'DELETE_PRODUCT',
+    'CREATE_STORE', 'VIEW_STORE', 'EDIT_STORE', 'DELETE_STORE',
+    'CREATE_CATEGORY', 'VIEW_CATEGORY', 'EDIT_CATEGORY', 'DELETE_CATEGORY',
+    'CREATE_PERMISSION', 'VIEW_PERMISSION', 'EDIT_PERMISSION', 'DELETE_PERMISSION',
   ]
   for (const action of actionNames) {
     await PermissionDetail.create(await createDetail(perId, action), { transaction: transaction })
