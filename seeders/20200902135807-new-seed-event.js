@@ -2,7 +2,7 @@
 const faker = require('faker')
 const users = [...Array(100)].map((user)=>({
   name: faker.name.firstName(),  
-  phone: faker.phone.phoneNumber(),
+  phone: faker.phone.phoneNumber('0##########'),
   email: faker.internet.email(),
   password:faker.internet.password(8),
   address:faker.address.country(),

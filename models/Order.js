@@ -14,7 +14,12 @@ const Order = sequelize.define('Order', {
   },
   note: {
     type: Sequelize.STRING(255)
+  },
+  isPayed:{
+    type:Sequelize.BOOLEAN(),
+    defaultValue:false
   }
+
 }, { 
   tableName: 'orders'
 })
