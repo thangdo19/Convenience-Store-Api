@@ -1,8 +1,8 @@
 'use strict';
 const faker = require('faker')
-const stores = [...Array(100)].map((store)=>({
-  name:faker.name.title(),
- address:faker.company.companyName(),
+const stores = [...Array(50)].map((store)=>({
+  name:faker.company.companyName(),
+  address:faker.address.streetName(),
   createdAt:new Date(),
   updatedAt:new Date()
 }))

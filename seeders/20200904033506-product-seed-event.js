@@ -1,6 +1,6 @@
 'use strict';
 const faker = require('faker')
-const products = [...Array(100)].map((product)=>({
+const products = [...Array(150)].map((product)=>({
   categoryId:parseInt(Math.floor(Math.random() *50) + 1),
   name: faker.commerce.productName(),  
   numberInStock:parseInt(Math.floor(Math.random() *50) + 1), 

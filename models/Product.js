@@ -21,7 +21,7 @@ const Product = sequelize.define('Product', {
     type: Sequelize.INTEGER(11),
     defaultValue: 0,
     allowNull: false,
-    //validate: { min: 0 }
+    validate: { min: 0 }
   }
 }, { 
   tableName: 'products'
